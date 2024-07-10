@@ -3,7 +3,7 @@ import os
 
 
 class Product:
-
+    """Класс, представляющий продукт."""
     def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
@@ -12,7 +12,7 @@ class Product:
 
 
 class Category:
-
+    """Класс, представляющий категорию продуктов."""
     total_categories = 0
     total_unique_products = 0
 
@@ -36,6 +36,7 @@ class Category:
 
 
 def load_json_file(file_path: str):
+    """Функция считывающая данные с JSON-файла и создает объекты Category и Product"""
     with open(file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
 
