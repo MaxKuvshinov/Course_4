@@ -115,3 +115,12 @@ def test_price_setter(input_mock, sample_product):
     input_mock.side_effect = ["n"]
     sample_product.price = 150000
     assert sample_product.price == 200000.0
+
+
+def test_price_deleter(sample_product):
+    assert sample_product.price == 210000.0
+
+    del sample_product.price
+
+    assert sample_product._price is None
+    assert sample_product.price is None

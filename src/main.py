@@ -30,6 +30,10 @@ class Product:
         else:
             self._price = value
 
+    @price.deleter
+    def price(self) -> None:
+        self._price = None
+
     @classmethod
     def creates_product(cls, name: str, description: str, price: float, quantity: int) -> "Product":
         return cls(name, description, price, quantity)
