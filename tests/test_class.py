@@ -1,4 +1,5 @@
 import json
+from unittest.mock import patch
 
 import pytest
 from src.main import Category, Product, load_json_file
@@ -84,17 +85,42 @@ def sample_data(tmp_path):
 def test_load_json_file(sample_data):
     categories = load_json_file(sample_data)
     assert len(categories) == 2
+
+    assert isinstance(categories[0], Category)
+    assert isinstance(categories[1], Category)
+
     assert categories[0].name == "Смартфоны"
     assert categories[1].name == "Телевизоры"
 
-    assert len(categories[0].products) == 3
-    assert categories[0].products[0].name == "Samsung Galaxy C23 Ultra"
+    assert len(categories[0].get_product()) == 3
+    assert isinstance(categories[0].get_product()[0], Product)
+    assert categories[0].get_product()[0].name == "Samsung Galaxy C23 Ultra"
 
-    assert len(categories[1].products) == 1
-    assert categories[1].products[0].name == '55" QLED 4K'
+    assert len(categories[1].get_product()) == 1
+    assert isinstance(categories[1].get_product()[0], Product)
+    assert categories[1].get_product()[0].name == '55" QLED 4K'
 
 
 def test_total_counts_2(sample_data):
     load_json_file(sample_data)
     assert Category.get_total_categories() == 2
     assert Category.get_total_unique_products() == 4
+
+
+@patch("builtins.input", side_effect=["y"])
+def test_price_setter(input_mock, sample_product):
+    sample_product.price = 200000
+    assert sample_product.price == 200000.0
+
+    input_mock.side_effect = ["n"]
+    sample_product.price = 150000
+    assert sample_product.price == 200000.0
+
+
+def test_price_deleter(sample_product):
+    assert sample_product.price == 210000.0
+
+    del sample_product.price
+
+    assert sample_product._price is None
+    assert sample_product.price is None
