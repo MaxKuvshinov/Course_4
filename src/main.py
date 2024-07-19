@@ -41,7 +41,7 @@ class Product:
     def __str__(self) -> str:
         return f"{self.name}, {self._price} руб. Остаток {self.quantity} шт."
 
-    def __add__(self, other):
+    def __add__(self, other: object) -> float:
         if isinstance(other, Product):
             return self._price * self.quantity + other._price * other.quantity
         raise TypeError(f"Невозможно сложить объект типа 'Product' с объектом типа '{type(other).__name__}'")
@@ -78,10 +78,10 @@ class Category:
     def get_total_unique_products(cls) -> int:
         return cls.total_unique_products
 
-    def __len__(self):
+    def __len__(self) -> int:
         return sum(product.quantity for product in self.__products)
 
-    def __str__(self):
+    def __str__(self) -> str:
         total_products = len(self)
         return f"{self.name}, количество продуктов: {total_products} шт."
 

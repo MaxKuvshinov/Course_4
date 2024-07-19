@@ -18,7 +18,9 @@ def sample_product():
 
 @pytest.fixture()
 def sample_product2():
-    return Product(name="Samsung Galaxy C23 Ultra", description="256GB, Серый цвет, 200MP камера", price=180000.0, quantity=5)
+    return Product(
+        name="Samsung Galaxy C23 Ultra", description="256GB, Серый цвет, 200MP камера", price=180000.0, quantity=5
+    )
 
 
 @pytest.fixture()
@@ -147,4 +149,6 @@ def test_category_len(sample_category, sample_product):
 
 
 def test_product_add(sample_product, sample_product2):
-    assert (sample_product + sample_product2) == (sample_product.price * sample_product.quantity + sample_product2.price * sample_product2.quantity)
+    assert (sample_product + sample_product2) == (
+        sample_product.price * sample_product.quantity + sample_product2.price * sample_product2.quantity
+    )
