@@ -43,7 +43,7 @@ class Product:
 
     def __add__(self, other: object) -> float:
         if isinstance(other, Product):
-            return self._price * self.quantity + other._price * other.quantity
+            return self.price * self.quantity + other.price * other.quantity
         raise TypeError(f"Невозможно сложить объект типа 'Product' с объектом типа '{type(other).__name__}'")
 
 
