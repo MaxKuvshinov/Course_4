@@ -38,6 +38,14 @@ class Product:
     def creates_product(cls, name: str, description: str, price: float, quantity: int) -> "Product":
         return cls(name, description, price, quantity)
 
+    def __str__(self) -> str:
+        return f"{self.name}, {self._price} руб. Остаток {self.quantity} шт."
+
+    def __add__(self, other: object) -> float:
+        if isinstance(other, Product):
+            return self.price * self.quantity + other.price * other.quantity
+        raise TypeError(f"Невозможно сложить объект типа 'Product' с объектом типа '{type(other).__name__}'")
+
 
 class Category:
     """Класс, представляющий категорию продуктов."""
@@ -69,6 +77,13 @@ class Category:
     @classmethod
     def get_total_unique_products(cls) -> int:
         return cls.total_unique_products
+
+    def __len__(self) -> int:
+        return sum(product.quantity for product in self.__products)
+
+    def __str__(self) -> str:
+        total_products = len(self)
+        return f"{self.name}, количество продуктов: {total_products} шт."
 
 
 def load_json_file(file_path: str) -> List[Category]:
@@ -102,9 +117,18 @@ def load_json_file(file_path: str) -> List[Category]:
 #     for category in categories:
 #         print(f"Категория: {category.name}")
 #         print(f"Описание: {category.description}")
+#         print(f"Строковое представление категории: {category}")
+#         print(f"Количество продуктов в категории: {len(category)}")
 #         for product_info in category.products:
-#             print(product_info)
+#             print(f"Строковое представление продукта: {product_info}")
 #         print()
+#
+#     if len(categories[0].get_product()) > 1:
+#         product1 = categories[0].get_product()[0]
+#         product2 = categories[0].get_product()[1]
+#         print(f"Сумма цен продуктов (учитывая количество на складе): {product1 + product2}")
+#     else:
+#         print("Не хватает продуктов для сложения.")
 #
 #     smartphone = categories[0].get_product()[0]
 #     print(f"Текущая цена смартфона: {smartphone.price}")

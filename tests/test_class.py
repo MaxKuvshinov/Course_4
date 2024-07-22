@@ -17,6 +17,13 @@ def sample_product():
 
 
 @pytest.fixture()
+def sample_product2():
+    return Product(
+        name="Samsung Galaxy C23 Ultra", description="256GB, Серый цвет, 200MP камера", price=180000.0, quantity=5
+    )
+
+
+@pytest.fixture()
 def sample_category():
     return Category(name="Смартфоны", description="Смартфоны, как средство не только коммуникации")
 
@@ -124,3 +131,24 @@ def test_price_deleter(sample_product):
 
     assert sample_product._price is None
     assert sample_product.price is None
+
+
+def test_product_str(sample_product):
+    assert str(sample_product) == "Iphone 15, 210000.0 руб. Остаток 8 шт."
+
+
+def test_category_str(sample_category, sample_product):
+    sample_category.add_product(sample_product)
+    assert str(sample_category) == "Смартфоны, количество продуктов: 8 шт."
+
+
+def test_category_len(sample_category, sample_product):
+    assert len(sample_category) == 0
+    sample_category.add_product(sample_product)
+    assert len(sample_category) == 8
+
+
+def test_product_add(sample_product, sample_product2):
+    assert (sample_product + sample_product2) == (
+        sample_product.price * sample_product.quantity + sample_product2.price * sample_product2.quantity
+    )
