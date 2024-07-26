@@ -44,10 +44,12 @@ class Product:
     def __add__(self, other: object) -> float:
         if not isinstance(other, Product):
             raise TypeError(
-                f"Невозможно сложить объект типа '{type(self).__name__}' с объектом типа '{type(other).__name__}'")
+                f"Невозможно сложить объект типа '{type(self).__name__}' с объектом типа '{type(other).__name__}'"
+            )
         if type(self) is not type(other):
             raise TypeError(
-                f"Невозможно сложить объекты разных типов: '{type(self).__name__}' и '{type(other).__name__}'")
+                f"Невозможно сложить объекты разных типов: '{type(self).__name__}' и '{type(other).__name__}'"
+            )
         return self.price * self.quantity + other.price * other.quantity
 
 
@@ -97,27 +99,55 @@ class Category:
 
 class Smartphone(Product):
     """Класс, предоставляющий смартфон"""
-    def __init__(self, name, description, price, quantity, performance, model, memory_size, color):
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        performance: str,
+        model: str,
+        memory_size: int,
+        color: str,
+    ) -> None:
         super().__init__(name, description, price, quantity)
         self.performance = performance
         self.model = model
         self.memory_size = memory_size
         self.color = color
 
-    def __str__(self):
-        return f"{self.name} (Модель: {self.model}, Память: {self.memory_size}, Цвет: {self.color}), Цена: {self.price} руб. Остаток: {self.quantity}"
+    def __str__(self) -> str:
+        return (
+            f"{self.name} (Модель: {self.model}, Память: {self.memory_size}, Цвет: {self.color}), "
+            f"Цена: {self.price} руб. Остаток: {self.quantity}"
+        )
 
 
 class LawnGrass(Product):
     """Класс, представляющий газонную траву"""
-    def __init__(self, name, description, price, quantity, country_of_origin, germination_period, color):
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country_of_origin: str,
+        germination_period: int,
+        color: str,
+    ) -> None:
         super().__init__(name, description, price, quantity)
         self.country_of_origin = country_of_origin
         self.germination_period = germination_period
         self.color = color
 
-    def __str__(self):
-        return f"{self.name} (Страна-производитель: {self.country_of_origin}, Срок прорастания: {self.germination_period} дней, Цвет: {self.color}), Цена: {self.price} руб. Остаток: {self.quantity}"
+    def __str__(self) -> str:
+        return (
+            f"{self.name} (Страна-производитель: {self.country_of_origin}, "
+            f"Срок прорастания: {self.germination_period} дней, Цвет: {self.color}), Цена: {self.price} руб. "
+            f"Остаток: {self.quantity}"
+        )
 
 
 def load_json_file(file_path: str) -> List[Category]:
@@ -170,11 +200,11 @@ def load_json_file(file_path: str) -> List[Category]:
 #     print(f"Обновленная цена смартфона: {smartphone.price}")
 #
 #
-# smartphone = Smartphone("Samsung Galaxy C23 Ultra", "256GB, Серый цвет, 200MP камера",
-# 180000.0, 5, "Высокая", "С23 Ultra", 256, "Black")
+# smartphone = Smartphone(
+#     "Samsung Galaxy C23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, "Высокая", "С23 Ultra", 256, "Black"
+# )
 #
-# lawn_grass = LawnGrass("Трава газонная", "Описание травы", 5000.0, 10, "Россия",
-# 10, "Зеленый")
+# lawn_grass = LawnGrass("Трава газонная", "Описание травы", 5000.0, 10, "Россия", 10, "Зеленый")
 #
 # print("Smartphone:")
 # print(smartphone)
