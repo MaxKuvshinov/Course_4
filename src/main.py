@@ -1,7 +1,7 @@
 import json
 import os
-from typing import List
 from abc import ABC, abstractmethod
+from typing import List
 
 
 class MixinInfo:
@@ -45,7 +45,7 @@ class Product(AbstractClass):
     def price(self, value: float) -> None:
         if value <= 0:
             print("Цена введена некорректная.")
-        elif hasattr(self, '_price') and value < self._price:
+        elif hasattr(self, "_price") and value < self._price:
             user_confirm = input(f"Цена снижается с {self._price} до {value}. Вы уверены? (y/n): ").strip().lower()
             if user_confirm == "y":
                 self._price = value
