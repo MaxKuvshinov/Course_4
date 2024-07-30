@@ -1,16 +1,41 @@
 import json
 import os
 from typing import List
+from abc import ABC, abstractmethod
 
 
-class Product:
-    """Класс, представляющий продукт."""
+class MixinInfo:
+    """Миксин для логирования создания объекта"""
 
+    def __init__(self):
+        print(self.__repr__())
+
+    def __repr__(self) -> str:
+        """Возвращает строку с названием класса и атрибутами"""
+        attributes = ", ".join(f"{key}={repr(value)}" for key, value in self.__dict__.items())
+        return f"{self.__class__.__name__}({attributes})"
+
+
+class AbstractClass(MixinInfo, ABC):
+    """Абстрактный класс"""
+
+    @abstractmethod
     def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
         self._price = price
         self.quantity = quantity
+
+    @abstractmethod
+    def __str__(self) -> str:
+        pass
+
+
+class Product(AbstractClass):
+    """Класс, представляющий продукт."""
+
+    def __init__(self, name: str, description: str, price: float, quantity: int):
+        super().__init__(name, description, price, quantity)
 
     @property
     def price(self) -> float:
@@ -20,7 +45,7 @@ class Product:
     def price(self, value: float) -> None:
         if value <= 0:
             print("Цена введена некорректная.")
-        elif value < self._price:
+        elif hasattr(self, '_price') and value < self._price:
             user_confirm = input(f"Цена снижается с {self._price} до {value}. Вы уверены? (y/n): ").strip().lower()
             if user_confirm == "y":
                 self._price = value
@@ -53,13 +78,14 @@ class Product:
         return self.price * self.quantity + other.price * other.quantity
 
 
-class Category:
+class Category(MixinInfo):
     """Класс, представляющий категорию продуктов."""
 
     total_categories = 0
     total_unique_products = 0
 
     def __init__(self, name: str, description: str):
+        super().__init__()
         self.name = name
         self.description = description
         self.__products: List[Product] = []
@@ -97,7 +123,7 @@ class Category:
         return f"{self.name}, количество продуктов: {total_products} шт."
 
 
-class Smartphone(Product):
+class Smartphone(Product, MixinInfo):
     """Класс, предоставляющий смартфон"""
 
     def __init__(
@@ -124,7 +150,7 @@ class Smartphone(Product):
         )
 
 
-class LawnGrass(Product):
+class LawnGrass(Product, MixinInfo):
     """Класс, представляющий газонную траву"""
 
     def __init__(
