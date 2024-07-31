@@ -8,6 +8,7 @@ class MixinInfo:
     """Миксин для логирования создания объекта"""
 
     def __init__(self):
+        super().__init__()
         print(self.__repr__())
 
     def __repr__(self) -> str:
@@ -18,8 +19,6 @@ class MixinInfo:
 
 class AbstractClass(MixinInfo, ABC):
     """Абстрактный класс"""
-
-    @abstractmethod
     def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
@@ -27,8 +26,27 @@ class AbstractClass(MixinInfo, ABC):
         self.quantity = quantity
         super().__init__()
 
+    @property
+    @abstractmethod
+    def price(self) -> float:
+        pass
+
+    @price.setter
+    @abstractmethod
+    def price(self, value: float) -> None:
+        pass
+
+    @price.deleter
+    @abstractmethod
+    def price(self) -> None:
+        pass
+
     @abstractmethod
     def __str__(self) -> str:
+        pass
+
+    @abstractmethod
+    def __add__(self, other: object) -> float:
         pass
 
 
