@@ -12,7 +12,7 @@ class MixinInfo:
 
     def __repr__(self) -> str:
         """Возвращает строку с названием класса и атрибутами"""
-        attributes = ", ".join(f"{key}={repr(value)}" for key, value in self.__dict__.items())
+        attributes = ", ".join(repr(value) for value in self.__dict__.values())
         return f"{self.__class__.__name__}({attributes})"
 
 
@@ -25,6 +25,7 @@ class AbstractClass(MixinInfo, ABC):
         self.description = description
         self._price = price
         self.quantity = quantity
+        super().__init__()
 
     @abstractmethod
     def __str__(self) -> str:
@@ -85,10 +86,10 @@ class Category(MixinInfo):
     total_unique_products = 0
 
     def __init__(self, name: str, description: str):
-        super().__init__()
         self.name = name
         self.description = description
         self.__products: List[Product] = []
+        super().__init__()
         Category.total_categories += 1
 
     def add_product(self, product: Product) -> None:
@@ -123,7 +124,7 @@ class Category(MixinInfo):
         return f"{self.name}, количество продуктов: {total_products} шт."
 
 
-class Smartphone(Product, MixinInfo):
+class Smartphone(Product):
     """Класс, предоставляющий смартфон"""
 
     def __init__(
@@ -150,7 +151,7 @@ class Smartphone(Product, MixinInfo):
         )
 
 
-class LawnGrass(Product, MixinInfo):
+class LawnGrass(Product):
     """Класс, представляющий газонную траву"""
 
     def __init__(
@@ -200,40 +201,40 @@ def load_json_file(file_path: str) -> List[Category]:
     return categories
 
 
-# if __name__ == "__main__":
-#     file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../products.json"))
-#     categories = load_json_file(file_path)
-#
-#     for category in categories:
-#         print(f"Категория: {category.name}")
-#         print(f"Описание: {category.description}")
-#         print(f"Строковое представление категории: {category}")
-#         print(f"Количество продуктов в категории: {len(category)}")
-#         for product_info in category.products:
-#             print(f"Строковое представление продукта: {product_info}")
-#         print()
-#
-#     if len(categories[0].get_product()) > 1:
-#         product1 = categories[0].get_product()[0]
-#         product2 = categories[0].get_product()[1]
-#         print(f"Сумма цен продуктов (учитывая количество на складе): {product1 + product2}")
-#     else:
-#         print("Не хватает продуктов для сложения.")
-#
-#     smartphone = categories[0].get_product()[0]
-#     print(f"Текущая цена смартфона: {smartphone.price}")
-#     smartphone.price = 14000
-#     print(f"Обновленная цена смартфона: {smartphone.price}")
-#
-#
-# smartphone = Smartphone(
-#     "Samsung Galaxy C23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, "Высокая", "С23 Ultra", 256, "Black"
-# )
-#
-# lawn_grass = LawnGrass("Трава газонная", "Описание травы", 5000.0, 10, "Россия", 10, "Зеленый")
-#
-# print("Smartphone:")
-# print(smartphone)
-#
-# print("LawnGrass:")
-# print(lawn_grass)
+if __name__ == "__main__":
+    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../products.json"))
+    categories = load_json_file(file_path)
+
+    for category in categories:
+        print(f"Категория: {category.name}")
+        print(f"Описание: {category.description}")
+        print(f"Строковое представление категории: {category}")
+        print(f"Количество продуктов в категории: {len(category)}")
+        for product_info in category.products:
+            print(f"Строковое представление продукта: {product_info}")
+        print()
+
+    if len(categories[0].get_product()) > 1:
+        product1 = categories[0].get_product()[0]
+        product2 = categories[0].get_product()[1]
+        print(f"Сумма цен продуктов (учитывая количество на складе): {product1 + product2}")
+    else:
+        print("Не хватает продуктов для сложения.")
+
+    smartphone = categories[0].get_product()[0]
+    print(f"Текущая цена смартфона: {smartphone.price}")
+    smartphone.price = 14000
+    print(f"Обновленная цена смартфона: {smartphone.price}")
+
+
+smartphone = Smartphone(
+    "Samsung Galaxy C23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, "Высокая", "С23 Ultra", 256, "Black"
+)
+
+lawn_grass = LawnGrass("Трава газонная", "Описание травы", 5000.0, 10, "Россия", 10, "Зеленый")
+
+print("Smartphone:")
+print(smartphone)
+
+print("LawnGrass:")
+print(lawn_grass)
