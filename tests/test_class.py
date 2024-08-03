@@ -152,3 +152,14 @@ def test_product_add(sample_product, sample_product2):
     assert (sample_product + sample_product2) == (
         sample_product.price * sample_product.quantity + sample_product2.price * sample_product2.quantity
     )
+
+
+def test_average_price(sample_category, sample_product, sample_product2):
+    sample_category.add_product(sample_product)
+    sample_category.add_product(sample_product2)
+    expected_average_price = (
+            (sample_product.price * sample_product.quantity + sample_product2.price * sample_product2.quantity)
+            / (sample_product.quantity + sample_product2.quantity)
+    )
+    assert sample_category.average_price() == expected_average_price
+
