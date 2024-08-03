@@ -1,9 +1,54 @@
 import json
 import os
+from abc import ABC, abstractmethod
 from typing import List
 
 
-class Product:
+class MixinInfo:
+    """Миксин для логирования создания объекта"""
+
+    def __init__(self):
+        super().__init__()
+        print(self.__repr__())
+
+    def __repr__(self) -> str:
+        """Возвращает строку с названием класса и атрибутами"""
+        attributes = ", ".join(repr(value) for value in self.__dict__.values())
+        return f"{self.__class__.__name__}({attributes})"
+
+
+class AbstractClass(ABC):
+    """Абстрактный класс"""
+
+    @property
+    @abstractmethod
+    def price(self) -> float:
+        pass
+
+    @price.setter
+    @abstractmethod
+    def price(self, value: float) -> None:
+        pass
+
+    @price.deleter
+    @abstractmethod
+    def price(self) -> None:
+        pass
+
+    @abstractmethod
+    def creates_product(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    def __str__(self) -> str:
+        pass
+
+    @abstractmethod
+    def __add__(self, other: object) -> float:
+        pass
+
+
+class Product(AbstractClass, MixinInfo):
     """Класс, представляющий продукт."""
 
     def __init__(self, name: str, description: str, price: float, quantity: int):
@@ -11,6 +56,7 @@ class Product:
         self.description = description
         self._price = price
         self.quantity = quantity
+        super().__init__()
 
     @property
     def price(self) -> float:
@@ -20,7 +66,7 @@ class Product:
     def price(self, value: float) -> None:
         if value <= 0:
             print("Цена введена некорректная.")
-        elif value < self._price:
+        elif hasattr(self, "_price") and value < self._price:
             user_confirm = input(f"Цена снижается с {self._price} до {value}. Вы уверены? (y/n): ").strip().lower()
             if user_confirm == "y":
                 self._price = value
@@ -53,7 +99,7 @@ class Product:
         return self.price * self.quantity + other.price * other.quantity
 
 
-class Category:
+class Category(MixinInfo):
     """Класс, представляющий категорию продуктов."""
 
     total_categories = 0
@@ -63,6 +109,7 @@ class Category:
         self.name = name
         self.description = description
         self.__products: List[Product] = []
+        super().__init__()
         Category.total_categories += 1
 
     def add_product(self, product: Product) -> None:
