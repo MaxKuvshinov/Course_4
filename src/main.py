@@ -82,6 +82,8 @@ class Product(AbstractClass, MixinInfo):
 
     @classmethod
     def creates_product(cls, name: str, description: str, price: float, quantity: int) -> "Product":
+        if quantity == 0:
+            raise ValueError("Нельзя добавить товар с нулевым количеством")
         return cls(name, description, price, quantity)
 
     def __str__(self) -> str:
@@ -127,6 +129,21 @@ class Category(MixinInfo):
 
     def get_product(self) -> List[Product]:
         return self.__products
+
+    def average_price(self) -> float:
+        """Метод, считающий среднюю цену всех товаров в категории."""
+        total_price = sum(product.price * product.quantity for product in self.__products)
+        total_quantity = sum(product.quantity for product in self.__products)
+
+        try:
+            average = total_price / total_quantity
+
+        except ZeroDivisionError:
+            print("Нет товаров в данной категории")
+
+            average = 0.0
+
+        return average
 
     @classmethod
     def get_total_categories(cls) -> int:
